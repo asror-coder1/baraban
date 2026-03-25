@@ -1,0 +1,101 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  height: 60px;
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.left, .right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.wheelIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #ff4757 0deg 60deg,
+    #2e86de 60deg 120deg,
+    #ffa502 120deg 180deg,
+    #2ed573 180deg 240deg,
+    #eccc68 240deg 300deg,
+    #747d8c 300deg 360deg
+  );
+  border: 2px solid white;
+}
+
+.logoText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.themeToggle {
+  display: flex;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  gap: 4px;
+}
+
+.themeBtn {
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+.themeBtn:hover {
+  opacity: 1;
+}
+
+.activeTheme {
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navItem {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color);
+}
+
+.langSelect {
+  background: var(--header-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.langSelect:hover {
+  border-color: var(--accent-color);
+}
