@@ -1,15 +1,20 @@
 .panel {
-  width: 400px;
+  width: 420px;
   max-width: 100%;
   display: flex;
   flex-direction: column;
   margin: 1.5rem;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 140px);
   overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 
 .tabs {
   display: flex;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -17,74 +22,84 @@
   flex: 1;
   background: transparent;
   color: var(--text-secondary);
-  padding: 1rem;
+  padding: 0.75rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  border-bottom: 2px solid transparent;
+  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
 }
 
 .tab.active {
-  color: var(--accent-color);
-  border-bottom-color: var(--accent-color);
+  color: #fff;
+  background: var(--accent-color);
+  box-shadow: 0 0 15px var(--accent-glow);
 }
 
 .badge {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  margin-left: 5px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1.25rem;
   overflow: hidden;
 }
 
 .toolbar {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .toolBtn {
   flex: 1;
-  background: var(--accent-color);
-  color: white;
-  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  padding: 0.6rem;
   border-radius: var(--radius-md);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
 }
 
 .toolBtn:hover {
-  background: var(--accent-hover);
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .textarea {
   flex: 1;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-primary);
-  padding: 1rem;
+  padding: 1.25rem;
   font-family: var(--font-main);
   font-size: 1rem;
   resize: none;
-  line-height: 1.5;
+  line-height: 1.6;
+  transition: var(--transition);
 }
 
 .textarea:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 4px var(--accent-glow);
 }
 
 .footer {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   display: flex;
   align-items: center;
 }
@@ -92,52 +107,83 @@
 .checkbox {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.checkbox:hover {
+  color: var(--text-primary);
 }
 
 .resultsList {
   flex: 1;
   overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.resultsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.resultsList::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
 }
 
 .resultItem {
-  padding: 0.75rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .emptyResults {
   color: var(--text-secondary);
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 3rem;
+  font-style: italic;
 }
 
 .bottomActions {
-  padding: 1rem;
+  padding: 1.25rem;
   border-top: 1px solid var(--border-color);
 }
 
 .addWheelBtn {
   width: 100%;
-  background: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
   color: white;
-  padding: 0.75rem;
+  padding: 1rem;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  box-shadow: 0 10px 20px -5px var(--accent-glow);
 }
 
-@media (max-width: 900px) {
+.addWheelBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px var(--accent-glow);
+}
+
+@media (max-width: 1024px) {
   .panel {
     width: 100%;
-    margin: 1rem 0 0 0;
-    height: 400px;
+    margin: 0;
+    height: 450px;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 }

@@ -1,13 +1,39 @@
-.app {
+#root {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  background-image: var(--bg-gradient);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bgGlow {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
 }
 
 .main {
   flex: 1;
   display: flex;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1600px;
+  position: relative;
+  z-index: 1;
   overflow: hidden;
 }
 
@@ -15,76 +41,153 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
   position: relative;
-  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+}
+
+.wheelWrapper {
+  width: 100%;
+  max-width: min(70vh, 700px);
+  aspect-ratio: 1;
+  position: relative;
+  filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
 }
 
 .header {
-  padding: 2rem 3rem 0;
-  z-index: 10;
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .title {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 1rem;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .editBtn {
   background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem;
+  padding: 8px;
   border-radius: 50%;
   font-size: 1rem;
+  transition: var(--transition);
+}
+
+.editBtn:hover {
+  background: var(--accent-color);
+  transform: rotate(15deg);
+}
+
+.hint {
+  margin-top: 2rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  opacity: 0.7;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
 }
 
 .sidebar {
-  width: 450px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  z-index: 10;
 }
 
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal {
-  width: 400px;
+  width: 480px;
+  max-width: 90vw;
   padding: 3rem 2rem;
   text-align: center;
-  animation: modalIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(0.9);
+  animation: modalIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes modalIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  to { transform: scale(1); }
 }
 
 .confetti {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
 }
 
 .modalTitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--text-secondary);
-  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 1rem;
+}
+
+.winnerWrapper {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 2.5rem;
+  box-shadow: 0 15px 40px var(--accent-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.winnerWrapper::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  animation: rotateGlow 4s linear infinite;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .winnerName {
   font-size: 3.5rem;
   font-weight: 800;
-  margin: 1.5rem 0 2rem;
-  color: #fbbf24;
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+  color: white;
+  margin: 0;
+  word-break: break-word;
+  position: relative;
+  z-index: 1;
 }
 
 .modalActions {
@@ -94,14 +197,21 @@
 
 .closeBtn, .removeBtn {
   flex: 1;
-  padding: 0.75rem;
+  padding: 1.25rem;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
 .closeBtn {
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .removeBtn {
@@ -109,29 +219,62 @@
   color: white;
 }
 
-@media (max-width: 900px) {
+.removeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px var(--accent-glow);
+}
+
+.footer {
+  padding: 1.5rem 3rem;
+  background: var(--header-bg);
+  border-top: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.footerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.links {
+  display: flex;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
   .main {
     flex-direction: column;
     overflow-y: auto;
   }
   
+  .wheelSection {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+  
   .sidebar {
     width: 100%;
+    justify-content: center;
+    padding-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
   }
 }
 
-.footer {
-  padding: 0.5rem 1.5rem;
-  background-color: var(--header-bg);
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  justify-content: flex-end;
-  gap: 1.5rem;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
-.changelog {
-  text-decoration: underline;
-  cursor: pointer;
+@media (max-width: 600px) {
+  .footerContent {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .links {
+    gap: 1rem;
+  }
 }

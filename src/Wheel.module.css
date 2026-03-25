@@ -18,15 +18,15 @@
 
 .pointer {
   position: absolute;
-  right: -20px;
+  right: -25px;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
+  width: 50px;
   height: 40px;
-  background-color: #f8fafc;
+  background-color: #fff;
   clip-path: polygon(100% 50%, 0 0, 0 100%);
-  z-index: 20;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  z-index: 30;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
 }
 
 .wheel {
@@ -36,21 +36,24 @@
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 0 0 10px var(--header-bg),
-    0 20px 50px rgba(0,0,0,0.5);
+    0 0 0 12px var(--wheel-border),
+    0 30px 60px -12px rgba(0,0,0,0.6),
+    0 0 40px var(--accent-glow);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 4s cubic-bezier(0.1, 0, 0, 1);
 }
 
 .wheel::after {
   content: '';
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   pointer-events: none;
+  z-index: 5;
 }
 
 .segmentText {
@@ -58,41 +61,45 @@
   top: 50%;
   left: 50%;
   transform-origin: 0 0;
-  width: 50%; /* Go halfway to the center */
+  width: 48%; 
   text-align: right;
-  padding-right: 20px;
+  padding-right: 25px;
   color: white;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+  z-index: 2;
 }
 
 .centerCircle {
   position: absolute;
-  width: 80px;
-  height: 80px;
-  background-color: white;
+  width: 90px;
+  height: 90px;
+  background-color: #fff;
   border-radius: 50%;
-  z-index: 10;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 15;
+  box-shadow: 
+    inset 0 2px 10px rgba(0,0,0,0.2), 
+    0 5px 20px rgba(0,0,0,0.4);
+  background-image: radial-gradient(circle at center, #fff 0%, #e2e8f0 100%);
 }
 
 .centerText {
   position: absolute;
-  z-index: 11;
+  z-index: 20;
   text-align: center;
   color: white;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 1.5rem;
   line-height: 1.2;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
   pointer-events: none;
-  width: 300px;
+  width: 320px;
 }
 
 @media (max-width: 600px) {
@@ -102,16 +109,22 @@
   }
   
   .centerCircle {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
   
   .centerText {
     font-size: 1rem;
-    width: 200px;
+    width: 220px;
   }
   
   .segmentText {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    padding-right: 15px;
+  }
+  
+  .pointer {
+    right: -15px;
+    width: 35px;
   }
 }

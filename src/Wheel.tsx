@@ -24,16 +24,7 @@ const Wheel: React.FC<WheelProps> = ({ names, onWinner, t }) => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
-  const spinWheel = (): void => {
-    if (isSpinning || names.length === 0) return;
-
-    setIsSpinning(true);
-    
-    // Minimum 5 full rotations + random extra degree
-    const extraDegree = Math.floor(Math.random() * 360);
-    const newDegree = rotation + 1800 + extraDegree;
-    setRotation(newDegree);
-
+  const playClick = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
@@ -42,57 +33,73 @@ const Wheel: React.FC<WheelProps> = ({ names, onWinner, t }) => {
       audioContext.resume();
     }
     
-    const playClick = () => {
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(150, audioContext.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      osc.connect(gain);
-      gain.connect(audioContext.destination);
-      osc.start();
-      osc.stop(audioContext.currentTime + 0.1);
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, audioContext.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(10, audioContext.currentTime + 0.05);
+    
+    gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    
+    osc.start();
+    osc.stop(audioContext.currentTime + 0.05);
+  };
+
+  const spinWheel = (): void => {
+    if (isSpinning || names.length === 0) return;
+
+    setIsSpinning(true);
+    
+    const extraDegree = Math.floor(Math.random() * 360);
+    const newDegree = rotation + 1800 + extraDegree;
+    setRotation(newDegree);
+
+    let lastSegment = -1;
+    const startTime = performance.now();
+    const duration = 4000;
+    
+    const checkRotation = () => {
+      if (wheelRef.current) {
+        const style = window.getComputedStyle(wheelRef.current);
+        const matrix = new DOMMatrixReadOnly(style.transform);
+        const angle = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
+        const positiveAngle = (angle < 0 ? angle + 360 : angle) % 360;
+        
+        const segmentAngle = 360 / names.length;
+        const currentSegment = Math.floor(positiveAngle / segmentAngle);
+        
+        if (currentSegment !== lastSegment) {
+          playClick();
+          lastSegment = currentSegment;
+        }
+      }
+
+      const elapsed = performance.now() - startTime;
+      if (elapsed < duration) {
+        requestAnimationFrame(checkRotation);
+      }
     };
 
-    // Simulate clicks during spin
-    let clickCount = 0;
-    const totalClicks = 20;
-    const interval = 4000 / totalClicks;
-    
-    const clickInterval = setInterval(() => {
-      playClick();
-      clickCount++;
-      if (clickCount >= totalClicks) clearInterval(clickInterval);
-    }, interval);
+    requestAnimationFrame(checkRotation);
 
     setTimeout(() => {
-      clearInterval(clickInterval);
       setIsSpinning(false);
-      
-      // Calculate winner
-      // The pointer is on the right (0 degrees in standard coordinate if we rotate clockwise)
-      // Standard rotation is clockwise. 
-      // actualDeg is the relative rotation from 0 to 359.
       const actualDeg = newDegree % 360;
-      
-      // WheelOfNames pointer is usually at 0 degrees (3 o'clock position)
-      // or at 270 degrees (12 o'clock). In the image, it's at 3 o'clock (right).
       const segmentAngle = 360 / names.length;
       const winnerIndex = Math.floor(((360 - (actualDeg % 360)) % 360) / segmentAngle);
-      
       onWinner(names[winnerIndex]);
-    }, 4000);
+    }, duration);
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "Enter") {
-        spinWheel();
-      }
+      if (e.ctrlKey && e.key === "Enter") spinWheel();
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [names, isSpinning, rotation]);
@@ -100,25 +107,19 @@ const Wheel: React.FC<WheelProps> = ({ names, onWinner, t }) => {
   const getWheelBackground = () => {
     if (names.length === 0) return "var(--header-bg)";
     if (names.length === 1) return COLORS[0];
-
     const segmentDegree = 360 / names.length;
-    const gradient = names
-      .map(
-        (_, i) =>
-          `${COLORS[i % COLORS.length]} ${i * segmentDegree}deg ${(i + 1) * segmentDegree}deg`,
-      )
-      .join(", ");
-
+    const gradient = names.map((_, i) =>
+      `${COLORS[i % COLORS.length]} ${i * segmentDegree}deg ${(i + 1) * segmentDegree}deg`
+    ).join(", ");
     return `conic-gradient(${gradient})`;
   };
 
   return (
     <div className={styles.wheelContainer}>
       <div className={styles.wheelWrapper}>
-        {/* Pointer on the right */}
         <div className={styles.pointer}></div>
-        
         <div 
+          ref={wheelRef}
           className={styles.wheel} 
           style={{ 
             background: getWheelBackground(),
@@ -138,14 +139,7 @@ const Wheel: React.FC<WheelProps> = ({ names, onWinner, t }) => {
               {name}
             </div>
           ))}
-          
-          {names.length === 0 && (
-            <div className={styles.centerText}>
-              {t.clickToSpin}
-            </div>
-          )}
-          
-          {/* Center Circle */}
+          {names.length === 0 && <div className={styles.centerText}>{t.clickToSpin}</div>}
           <div className={styles.centerCircle}></div>
         </div>
       </div>

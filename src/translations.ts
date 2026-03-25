@@ -19,7 +19,8 @@ export const translations = {
     noResults: "Hali natijalar yo'q. Barabanni aylantiring!",
     version: "Versiya",
     changelog: "O'zgarishlar",
-    clickToSpin: "Aylantirish uchun bosing yoki ctrl+enterni bosing"
+    clickToSpin: "Aylantirish uchun bosing yoki ctrl+enterni bosing",
+    newWheel: "Yangi Baraban"
   },
   en: {
     customize: "Customize",
@@ -41,7 +42,8 @@ export const translations = {
     noResults: "No results yet. Spin the wheel!",
     version: "Version",
     changelog: "Changelog",
-    clickToSpin: "Click to spin or press ctrl+enter"
+    clickToSpin: "Click to spin or press ctrl+enter",
+    newWheel: "New Wheel"
   },
   ru: {
     customize: "Настроить",
@@ -63,6 +65,7 @@ export const translations = {
     noResults: "Нет результатов. Крутите колесо!",
     version: "Версия",
     changelog: "История",
-    clickToSpin: "Нажмите, чтобы крутить или ctrl+enter"
+    clickToSpin: "Нажмите, чтобы крутить или ctrl+enter",
+    newWheel: "Новый Барабан"
   }
 };

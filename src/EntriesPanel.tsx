@@ -6,21 +6,33 @@ interface EntriesPanelProps {
   setNames: (names: string[]) => void;
   results: string[];
   t: any;
+  onAddWheel: () => void;
 }
 
-const EntriesPanel: React.FC<EntriesPanelProps> = ({ names, setNames, results, t }) => {
+const EntriesPanel: React.FC<EntriesPanelProps> = ({ names, setNames, results, t, onAddWheel }) => {
   const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
   const [inputText, setInputText] = useState<string>(names.join('\n'));
 
   // Sync text area when names change from outside (e.g. removing a winner)
+  // But ONLY if the user is not currently typing to avoid losing selection/newlines
   useEffect(() => {
-    setInputText(names.join('\n'));
+    const currentLines = inputText.trim().split('\n');
+    const namesEqual = JSON.stringify(currentLines) === JSON.stringify(names);
+    
+    if (!namesEqual) {
+      setInputText(names.join('\n'));
+    }
   }, [names]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setInputText(text);
-    const newNames = text.split('\n').filter(n => n.trim() !== '');
+    
+    // Parse names but don't force-sync back to inputText during change
+    const newNames = text.split('\n')
+      .map(n => n.trim())
+      .filter(n => n !== '');
+    
     setNames(newNames);
   };
 
@@ -91,7 +103,7 @@ const EntriesPanel: React.FC<EntriesPanelProps> = ({ names, setNames, results, t
       </div>
 
       <div className={styles.bottomActions}>
-        <button className={styles.addWheelBtn}>
+        <button className={styles.addWheelBtn} onClick={onAddWheel}>
           <span>+</span> {t.addWheel}
         </button>
       </div>

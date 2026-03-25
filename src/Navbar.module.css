@@ -2,100 +2,305 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.5rem;
-  height: 60px;
-  background-color: var(--header-bg);
+  padding: 0 2rem;
+  height: 70px;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  z-index: 100;
-  transition: all 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
 }
 
-.left, .right {
+.left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-shrink: 0;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.25rem;
   cursor: pointer;
 }
 
 .wheelIcon {
   width: 32px;
   height: 32px;
+  background: conic-gradient(from 0deg, #6366f1, #f59e0b, #10b981, #ef4444, #6366f1);
   border-radius: 50%;
-  background: conic-gradient(
-    #ff4757 0deg 60deg,
-    #2e86de 60deg 120deg,
-    #ffa502 120deg 180deg,
-    #2ed573 180deg 240deg,
-    #eccc68 240deg 300deg,
-    #747d8c 300deg 360deg
-  );
-  border: 2px solid white;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
 }
 
-.logoText {
-  font-size: 1.1rem;
-  font-weight: 500;
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.langSelect {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
   color: var(--text-primary);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.langSelect:hover {
+  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .themeToggle {
   display: flex;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.2);
   padding: 4px;
-  border-radius: var(--radius-md);
-  gap: 4px;
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+  gap: 2px;
 }
 
 .themeBtn {
   background: transparent;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 1rem;
-  opacity: 0.5;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  opacity: 0.6;
 }
 
 .themeBtn:hover {
   opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .activeTheme {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--accent-color) !important;
+  box-shadow: 0 0 10px var(--accent-glow);
   opacity: 1;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+.menuItems {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .navItem {
   background: transparent;
   color: var(--text-secondary);
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  white-space: nowrap;
 }
 
-.divider {
-  width: 1px;
-  height: 20px;
-  background-color: var(--border-color);
-}
-
-.langSelect {
-  background: var(--header-bg);
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 4px 8px;
-  font-size: 0.85rem;
-  outline: none;
-  cursor: pointer;
+  transform: translateY(-1px);
 }
 
-.langSelect:hover {
+.icon {
+  font-size: 1.1rem;
+}
+
+.mobileToggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  border: 1px solid var(--border-color);
+}
+
+@media (max-width: 1100px) {
+  .navItem span:not(.icon) {
+    display: none;
+  }
+  .navItem {
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .mobileToggle {
+    display: flex;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .right {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--header-bg);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 2rem;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    height: calc(100vh - 70px);
+    justify-content: flex-start;
+  }
+
+  .mobileOpen {
+    transform: translateX(0);
+  }
+
+  .controls, .menuItems {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .navItem {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 1.1rem;
+  }
+  
+  .navItem span:not(.icon) {
+    display: inline;
+  }
+
+  .langSelect {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .themeToggle {
+    width: 100%;
+    justify-content: space-around;
+    padding: 8px;
+  }
+  
+  .themeBtn {
+    width: 60px;
+    height: 40px;
+    border-radius: var(--radius-md);
+  }
+}
+
+.wheelTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 2rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.wheelTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.wheelTab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.wheelTab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.activeTab {
+  background: rgba(99, 102, 241, 0.15) !important;
   border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.tabTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.removeWheelBtn {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  height: 18px;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+.removeWheelBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.addWheelTab {
+  background: var(--accent-color);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px var(--accent-glow);
+}
+
+.addWheelTab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px var(--accent-glow);
 }
